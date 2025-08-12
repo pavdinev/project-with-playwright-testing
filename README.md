@@ -45,8 +45,8 @@ qa-portfolio-project/
 
 1. Clone the repo:  
    ```bash
-   git clone https://github.com/yourusername/qa-portfolio-project.git
-   cd qa-portfolio-project
+   git clone https://github.com/yourusername/qa-project.git
+   cd qa-project
    ```
 
 2. Create & activate a virtual environment:  
