@@ -1,0 +1,34 @@
+qa-portfolio-project/
+│
+├── tests/
+│   ├── api/
+│   │   ├── test_products.py
+│   │   ├── test_orders.py
+│   ├── ui/
+│   │   ├── test_login.py
+│   │   ├── test_checkout.py
+│   ├── db/
+│   │   ├── test_db_validation.py
+│
+├── data/
+│   ├── users.json
+│   ├── products.csv
+│
+├── utils/
+│   ├── api_helpers.py
+│   ├── ui_helpers.py
+│   ├── db_helpers.py          # New DB helper module
+│
+├── db/
+│   ├── test_data.db           # SQLite DB file (can be generated on first run)
+│
+├── reports/
+│
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+│
+├── playwright.config.py
+├── requirements.txt
+├── README.md
+└── pytest.ini

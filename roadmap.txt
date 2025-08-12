@@ -1,0 +1,60 @@
+Updated Implementation Roadmap
+Week 1 — Setup & Basic UI Automation
+Setup Python project (venv, requirements.txt)
+
+Install playwright, pytest, pytest-html
+
+Run playwright install
+
+Create simple UI test (login) with Playwright + pytest
+
+Setup Git repo
+
+Week 2 — API Automation + Basic DB Integration
+Write API tests using Playwright’s APIRequestContext
+
+Create db_helpers.py for DB connection & queries (SQLite)
+
+Write simple DB validation test (verify DB state after API call)
+
+Organize tests in /tests/api and /tests/db
+
+Week 3 — Advanced UI Automation + DB Validation
+Implement Page Object Model for UI tests
+
+Add data-driven UI tests (JSON/CSV + pytest.mark.parametrize)
+
+Add DB validation after UI workflows (e.g., after checkout, verify DB records)
+
+Add screenshot capture on failure
+
+Week 4 — Reporting & Cross-Browser Testing
+Add pytest-html reports with embedded screenshots
+
+Setup cross-browser tests for Chromium, Firefox, WebKit in Playwright config
+
+Add test tagging (smoke, regression) with pytest markers
+
+Week 5 — CI/CD Integration
+Create GitHub Actions workflow to run tests on push/PR
+
+Publish test reports as workflow artifacts
+
+Setup DB file in CI runner or generate fresh DB at start of tests
+
+Week 6 — Performance & Optional Enhancements
+Add simple API performance checks (response times)
+
+Optional: Add simple visual regression tests (screenshots diff)
+
+Optional: Accessibility testing integrations
+
+Week 7 — Documentation & Final Touches
+Write detailed README.md with project overview, setup, usage
+
+Add sample reports and screenshots
+
+Record short demo video or GIF of tests running (optional)
+
+Polish code (linting, comments)
+
