@@ -1,5 +1,4 @@
-# QA Automation Portfolio Project
-
+# QA Automation with Playwright
 ## Overview
 
 This project demonstrates a complete **end-to-end QA automation framework** built using **Python, Playwright, and pytest**. It covers UI, API, and database testing, including:
@@ -20,26 +19,9 @@ This project demonstrates a complete **end-to-end QA automation framework** buil
 - Playwright for UI & API automation  
 - Pytest test runner and pytest-html for reporting  
 - SQLite database for lightweight DB testing  
-- GitHub Actions for CI/CD  
 
 ---
 
-## Project Structure
-
-```
-qa-portfolio-project/
-├── tests/                  # UI, API, and DB test scripts  
-├── data/                   # Test data files (JSON, CSV)  
-├── utils/                  # Helper modules (API, UI, DB)  
-├── db/                     # SQLite DB file  
-├── reports/                # Test reports and screenshots  
-├── .github/workflows/      # CI pipeline config  
-├── requirements.txt        # Python dependencies  
-├── playwright.config.py    # Playwright config  
-└── README.md               # This file  
-```
-
----
 
 ## Setup Instructions
 
@@ -69,11 +51,6 @@ qa-portfolio-project/
 
 ---
 
-## CI/CD
-
-GitHub Actions pipeline is configured to run tests on each push and pull request. Test reports are saved as workflow artifacts.
-
----
 
 ## Extending the Project
 
@@ -84,9 +61,3 @@ GitHub Actions pipeline is configured to run tests on each push and pull request
 
 ---
 
-## Contact
-
-Pavel Dinev  
-Email: pavel.r.dinev@gmail.com  
-LinkedIn: [linkedin.com/in/pavel-dinev-ba4434290](https://linkedin.com/in/pavel-dinev-ba4434290)  
-GitHub: [github.com/pavdinev](https://github.com/pavdinev)
