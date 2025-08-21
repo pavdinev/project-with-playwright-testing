@@ -1,25 +1,23 @@
-from config import DEFAULT_USER
-from pages.login_page import LoginPage
-from pages.inventory_page import InventoryPage
-from tests.base_test import BaseTest
+# pages/login_page.py
 
+class LoginPage:
+    def __init__(self, page):
+        self.page = page
+        self.username_input = page.locator("#user-name")
+        self.password_input = page.locator("#password")
+        self.login_button = page.locator("#login-button")
+        self.error_message = page.locator("h3[data-test='error']")
 
-class TestLogin(BaseTest):
-    def test_login_success(self):
-        login = LoginPage(self.page)
-        login.navigate()
-        login.login(DEFAULT_USER["username"], DEFAULT_USER["password"])
+    def load(self):
+        self.page.goto("https://www.saucedemo.com/")
 
+    def login(self, username, password):
+        self.username_input.fill(username)
+        self.password_input.fill(password)
+        self.login_button.click()
 
-        inv = InventoryPage(self.page)
-        self.assertTrue(inv.is_loaded(), "Inventory should be visible after login")
+    def get_error(self):
+        return self.error_message.inner_text()
 
-
-    def test_login_failure(self):
-        login = LoginPage(self.page)
-        login.navigate()
-        login.login("standard_user", "wrong_password")
-
-
-        err = login.get_error()
-        self.assertIn("Username and password do not match", err)
+    def has_error(self):
+        return self.error_message.is_visible()

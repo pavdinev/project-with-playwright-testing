@@ -17,6 +17,14 @@ class TestCartAndSort(BaseTest):
     
     def test_sorting_and_add_to_cart(self):
         inv = InventoryPage(self.page)
+        #elements = self.page.locator("div")
+        #count = elements.count()
+        #print("Found", count, "divs")
+        #for i in range(count):
+            #print(elements.nth(i).get_attribute("class"))
+        #print(self.assertTrue(inv.is_loaded()))
+        #self.inventory_container = self.page.locator('[data-test="inventory-container"]')
+
         self.assertTrue(inv.is_loaded())
         
         
