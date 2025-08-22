@@ -10,10 +10,6 @@ class LoginPage:
         """Navigate to login page"""
         self.page.goto("https://www.saucedemo.com/")
 
-    def goto(self):
-        """Alias for navigate() so tests using login.goto() don’t break"""
-        self.navigate()
-
     def login(self, username, password):
         self.username_input.fill(username)
         self.password_input.fill(password)

@@ -11,7 +11,7 @@ class TestCartAndSort(BaseTest):
         super().setUp()
         # login once per test for isolation
         login = LoginPage(self.page)
-        login.goto()
+        login.navigate()
         login.login(DEFAULT_USER["username"], DEFAULT_USER["password"])
     
     
@@ -24,7 +24,6 @@ class TestCartAndSort(BaseTest):
             #print(elements.nth(i).get_attribute("class"))
         #print(self.assertTrue(inv.is_loaded()))
         #self.inventory_container = self.page.locator('[data-test="inventory-container"]')
-
         self.assertTrue(inv.is_loaded())
         
         
@@ -42,7 +41,7 @@ class TestCartAndSort(BaseTest):
         # Add two items by name
         inv.add_to_cart_by_name("Sauce Labs Backpack")
         inv.add_to_cart_by_name("Sauce Labs Bike Light")
-        self.assertEqual(inv.get_cart_count(), 2)
+        self.assertEqual(inv.cart_count(), 2)
         
         
         # Go to cart and verify

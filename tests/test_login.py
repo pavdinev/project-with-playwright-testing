@@ -1,23 +1,17 @@
-# pages/login_page.py
+# tests/test_login.py
+from pages.login_page import LoginPage
+from tests.base_test import BaseTest
+from config import DEFAULT_USER
+from pages.inventory_page import InventoryPage
 
-class LoginPage:
-    def __init__(self, page):
-        self.page = page
-        self.username_input = page.locator("#user-name")
-        self.password_input = page.locator("#password")
-        self.login_button = page.locator("#login-button")
-        self.error_message = page.locator("h3[data-test='error']")
+class TestLogin(BaseTest):
+    def setUp(self):
+        super().setUp()
+        self.login_page = LoginPage(self.page)
+        self.login_page.navigate()
 
-    def load(self):
-        self.page.goto("https://www.saucedemo.com/")
-
-    def login(self, username, password):
-        self.username_input.fill(username)
-        self.password_input.fill(password)
-        self.login_button.click()
-
-    def get_error(self):
-        return self.error_message.inner_text()
-
-    def has_error(self):
-        return self.error_message.is_visible()
+    def test_login_success(self):
+        self.login_page.login(DEFAULT_USER["username"], DEFAULT_USER["password"])
+        # use InventoryPage to check if logged in
+        inv = InventoryPage(self.page)
+        self.assertTrue(inv.is_loaded())
