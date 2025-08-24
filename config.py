@@ -1,7 +1,32 @@
 BASE_URL = "https://www.saucedemo.com"
-HEADLESS = True  # set False to watch in headed mode
-DEFAULT_USER = {
-    "username": "standard_user",
-    "password": "secret_sauce",
+HEADLESS = False  # set False to watch in headed mode
+
+# All known users on SauceDemo
+USERS = {
+    "standard_user": {
+        "username": "standard_user",
+        "password": "secret_sauce",
+    },
+    "locked_out_user": {
+        "username": "locked_out_user",
+        "password": "secret_sauce",
+    },
+    "problem_user": {
+        "username": "problem_user",
+        "password": "secret_sauce",
+    },
+    "performance_glitch_user": {
+        "username": "performance_glitch_user",
+        "password": "secret_sauce",
+    },
+    "error_user": {
+        "username": "error_user",
+        "password": "secret_sauce",
+    },
+    "visual_user": {
+        "username": "visual_user",
+        "password": "secret_sauce",
+    },
 }
+
 SCREENSHOT_DIR = "reports"

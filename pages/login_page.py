@@ -1,3 +1,4 @@
+import config
 class LoginPage:
     def __init__(self, page):
         self.page = page
@@ -8,7 +9,7 @@ class LoginPage:
 
     def navigate(self):
         """Navigate to login page"""
-        self.page.goto("https://www.saucedemo.com/")
+        self.page.goto(config.BASE_URL)
 
     def login(self, username, password):
         self.username_input.fill(username)

@@ -3,6 +3,9 @@ import unittest
 from playwright.sync_api import sync_playwright
 from config import HEADLESS, SCREENSHOT_DIR
 from utils.helpers import ensure_dir
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 
 
 class BaseTest(unittest.TestCase):
