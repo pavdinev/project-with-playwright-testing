@@ -1,5 +1,5 @@
 BASE_URL = "https://www.saucedemo.com"
-HEADLESS = False  # set False to watch in headed mode
+HEADLESS = True  # set False to watch in headed mode
 
 # All known users on SauceDemo
 USERS = {

@@ -66,13 +66,9 @@ class InventoryPage:
 
         
     def open_cart(self):
-        """Click the cart icon to go to the cart page."""
-        try:
-            self.get_open_cart.wait_for(state="visible", timeout=self.default_timeout)
-        except Exception as e:
-            print(f"Cart icon not visible: {e}")
-            raise
-        self.get_open_cart.click()
+        self.get_open_cart.scroll_into_view_if_needed(timeout=2000)
+        self.get_open_cart.click(timeout=5000)
+
 
     def logout(self):
         """Log out and return to the login page"""
