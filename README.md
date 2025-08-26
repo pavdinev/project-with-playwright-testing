@@ -15,3 +15,6 @@ python run_tests.py
 
 ## Run single test
 python -m unittest tests.test_login
+
+##Report
+Report and pictures on failure could be found in the reports/ folder after tests are run
