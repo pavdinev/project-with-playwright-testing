@@ -2,6 +2,7 @@
 from playwright.sync_api import Page
 from utils.smart_scroll import smart_scroll
 from pages.cart_page import CartPage
+import time
 class ProductItem:
     def __init__(self, name_locator, desc_locator, price_locator=None, add_to_cart_locator=None):
         self.name_locator = name_locator
@@ -74,8 +75,11 @@ class InventoryPage:
 
         for i, name_el in enumerate(names):
             desc_el = descs[i] if i < len(descs) else None
+            #print(desc_el.inner_text())
             price_el = prices[i] if i < len(prices) else None
+            #print(price_el.inner_text())
             add_btn_el = add_buttons[i] if i < len(add_buttons) else None
+            #print(add_btn_el.inner_text())
             products.append(ProductItem(name_el, desc_el, price_el, add_btn_el))
         return products
 
@@ -106,6 +110,32 @@ class InventoryPage:
             return True
         except:
             return False
+        
+        # --- Add to cart actions ---
+    def add_item_by_name(self, product_name: str) -> bool:
+        """Click 'Add to cart' for a product by name."""
+        for product in self.get_all_products():
+            if product.get_name() == product_name:
+                if product.is_available():
+                    product.add_to_cart_locator.click()
+                    return True
+        return False
+
+    def add_all_items(self) -> int:
+        count = 0
+        for product in self.get_all_products():
+            product.add_to_cart_locator.scroll_into_view_if_needed(scroll_mode="center")
+            print(product.get_name())
+            print(product.is_available())
+            if product.is_available():
+                # scroll to the button just before clicking
+                product.add_to_cart_locator.scroll_into_view_if_needed(scroll_mode="center")
+                product.add_to_cart_locator.click()
+                count += 1
+                # optionally wait until badge updates
+                time.sleep(0.3)
+        return count
+
 
     # --- Full page structure for caching ---
     def extract_inventory_page_structure(self) -> dict:

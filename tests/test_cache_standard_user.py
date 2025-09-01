@@ -41,6 +41,7 @@ class CacheStandardUserTests(BaseTest):
         # --- Inventory page ---
         inventory = InventoryPage(self.page)
         cache_data["inventory"] = inventory.extract_inventory_page_structure()
+        inventory.add_all_items()
 
         # --- Cart page ---
         inventory.go_to_cart()
