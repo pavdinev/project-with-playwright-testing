@@ -74,44 +74,51 @@ class BaseTest(unittest.TestCase):
             return False
 
     # ------------------- Smart scroll -------------------
-    def smart_scroll(self, page=None, pause: float = 0.3, back_to_top: bool = False, container_selector: str = None):
-        page = page or self.page
-        scrollable = f'document.querySelector("{container_selector}")' if container_selector else "document.scrollingElement"
+    @staticmethod
+    def smart_scroll(page, pause: float = 0.3, back_to_top: bool = False, container_selector: str = None):
+        """
+        Scrolls the entire page (or a scrollable container) step by step until the bottom is reached.
+        Optionally scrolls back to the top afterwards.
 
+        Args:
+            page: Playwright Page instance.
+            pause: Pause in seconds between scroll steps.
+            back_to_top: Whether to scroll back to the top after reaching the bottom.
+            container_selector: CSS selector of a scrollable container (if not the whole page).
+        """
+        scrollable = (
+            f'document.querySelector("{container_selector}")'
+            if container_selector
+            else "document.scrollingElement"
+        )
+
+        # Optional scroll to top first
         if back_to_top:
             page.evaluate(f"{scrollable}.scrollTop = 0")
             time.sleep(pause)
 
         last_scroll = -1
         same_count = 0
+
         while True:
             scroll_height = page.evaluate(f"{scrollable}.scrollHeight")
             scroll_top = page.evaluate(f"{scrollable}.scrollTop")
             client_height = page.evaluate(f"{scrollable}.clientHeight")
+
             new_scroll = min(scroll_top + client_height, scroll_height)
+
             if new_scroll == last_scroll:
                 same_count += 1
-                if same_count >= 2:
+                if same_count >= 2:  # stop when no further scrolling is possible
                     break
             else:
                 same_count = 0
                 page.evaluate(f"{scrollable}.scrollTop = {new_scroll}")
                 time.sleep(pause)
+
             last_scroll = new_scroll
 
+        # Optional scroll back to top
         if back_to_top:
             page.evaluate(f"{scrollable}.scrollTop = 0")
             time.sleep(pause)
-
-    # ------------------- Standard user cache -------------------
-    def cache_standard_user_state(self, key: str, value):
-        self._standard_cache[key] = value
-
-    def save_standard_cache_to_file(self, path="standard_cache.json"):
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(self._standard_cache, f, ensure_ascii=False, indent=2)
-
-    def load_standard_cache_from_file(self, path="standard_cache.json"):
-        if os.path.exists(path):
-            with open(path, "r", encoding="utf-8") as f:
-                self._standard_cache = json.load(f)

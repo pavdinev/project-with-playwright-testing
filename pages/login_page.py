@@ -1,14 +1,12 @@
 from playwright.sync_api import Page
 from tests.base_test import BaseTest
-import logging
-import traceback
+from utils.logging_helper import safe_action
 
 class LoginPage:
-    """Page Object for the Login page."""
+    """Page Object for the Login page with robust logging."""
 
     def __init__(self, page: Page):
         self.page = page
-        # Updated locators based on HTML
         self.username_input = page.locator("#user-name")
         self.password_input = page.locator("#password")
         self.login_button = page.locator("#login-button")
@@ -16,90 +14,69 @@ class LoginPage:
 
     # ------------------ Interactions ------------------
     def fill_username(self, username: str) -> bool:
-        try:
-            self.username_input.fill(username)
-            return True
-        except Exception as e:
-            logging.error(
-                f"Failed to fill username. Exception: {e.__class__.__name__}: {e}"
-            )
-            logging.debug(traceback.format_exc())  # full traceback for debugging
-            return False
+        return safe_action(f"fill username with '{username}'", lambda: self.username_input.fill(username), default=False)
 
     def fill_password(self, password: str) -> bool:
-        try:
-            self.password_input.fill(password)
-            return True
-        except Exception:
-            return False
+        return safe_action(f"fill password", lambda: self.password_input.fill(password), default=False)
 
     def click_login(self) -> bool:
-        try:
-            self.login_button.click()
-            return True
-        except Exception:
-            return False
-
-    # ------------------ Checks ------------------
-    def is_username_visible(self) -> bool:
-        return self.username_input.is_visible()
-
-    def is_password_visible(self) -> bool:
-        return self.password_input.is_visible()
-
-    def is_login_button_visible(self) -> bool:
-        return self.login_button.is_visible()
-
-    def error_visible(self) -> bool:
-        return self.error_message.is_visible()
-
-    def get_error_text(self) -> str:
-        return self.error_message.inner_text() if self.error_visible() else ""
+        return safe_action("click login button", lambda: self.login_button.click(), default=False)
 
     def scroll_all(self) -> bool:
-        try:
-            BaseTest.smart_scroll(self.page)
-            return True
-        except Exception:
-            return False
+        return safe_action("scroll full page", lambda: BaseTest.smart_scroll(self.page), default=False)
 
-    # ------------------ Attribute getters for caching ------------------
+    # ------------------ Visibility checks ------------------
+    def is_username_visible(self) -> bool:
+        return safe_action("check username visibility", lambda: self.username_input.is_visible(), default=False)
+
+    def is_password_visible(self) -> bool:
+        return safe_action("check password visibility", lambda: self.password_input.is_visible(), default=False)
+
+    def is_login_button_visible(self) -> bool:
+        return safe_action("check login button visibility", lambda: self.login_button.is_visible(), default=False)
+
+    def error_visible(self) -> bool:
+        return safe_action("check error message visibility", lambda: self.error_message.is_visible(), default=False)
+
+    # ------------------ Attribute getters ------------------
     def get_username_type(self):
-        return self.username_input.get_attribute("type")
+        return safe_action("get username type", lambda: self.username_input.get_attribute("type"))
 
     def get_username_placeholder(self):
-        return self.username_input.get_attribute("placeholder")
+        return safe_action("get username placeholder", lambda: self.username_input.get_attribute("placeholder"))
 
     def get_username_classes(self):
-        return self.username_input.get_attribute("class")
+        return safe_action("get username classes", lambda: self.username_input.get_attribute("class"))
 
     def get_username_visible(self):
-        return self.username_input.is_visible()
+        return self.is_username_visible()
 
     def get_password_type(self):
-        return self.password_input.get_attribute("type")
+        return safe_action("get password type", lambda: self.password_input.get_attribute("type"))
 
     def get_password_placeholder(self):
-        return self.password_input.get_attribute("placeholder")
+        return safe_action("get password placeholder", lambda: self.password_input.get_attribute("placeholder"))
 
     def get_password_classes(self):
-        return self.password_input.get_attribute("class")
+        return safe_action("get password classes", lambda: self.password_input.get_attribute("class"))
 
     def get_password_visible(self):
-        return self.password_input.is_visible()
+        return self.is_password_visible()
 
     def get_login_button_value(self):
-        return self.login_button.get_attribute("value")
+        return safe_action("get login button value", lambda: self.login_button.get_attribute("value"))
 
     def get_login_button_text(self):
-        return self.login_button.inner_text()
+        return safe_action("get login button text", lambda: self.login_button.inner_text())
 
     def get_login_button_visible(self):
-        return self.login_button.is_visible()
+        return self.is_login_button_visible()
+
+    def get_error_text(self) -> str:
+        return safe_action("get error text", lambda: self.error_message.inner_text(), default="") if self.error_visible() else ""
 
     # ------------------ Extract full page structure for caching ------------------
     def extract_login_page_structure(self):
-        """Return a cache-friendly structure of login page"""
         return {
             "fields": [
                 {
