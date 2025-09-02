@@ -3,6 +3,7 @@ from playwright.sync_api import Page
 from utils.smart_scroll import smart_scroll
 from pages.cart_page import CartPage
 import time
+
 class ProductItem:
     def __init__(self, name_locator, desc_locator, price_locator=None, add_to_cart_locator=None):
         self.name_locator = name_locator
@@ -23,7 +24,6 @@ class ProductItem:
         return self.add_to_cart_locator.is_visible() if self.add_to_cart_locator else True
 
     def get_positions(self) -> dict:
-        """Return positions of name, description, price"""
         positions = {}
         for key, locator in (("name", self.name_locator),
                              ("description", self.desc_locator),
@@ -35,6 +35,15 @@ class ProductItem:
                 positions[key] = None
         return positions
 
+    def is_add_to_cart(self) -> bool:
+        """
+        Check if the current button is still 'Add to cart'.
+        Uses the add_to_cart_locator directly — no root locator needed.
+        """
+        if not self.add_to_cart_locator:
+            return False
+        data_test = self.add_to_cart_locator.get_attribute("data-test")
+        return bool(data_test and data_test.startswith("add-to-cart"))
 
 class InventoryPage:
     def __init__(self, page: Page):
@@ -120,21 +129,48 @@ class InventoryPage:
                     product.add_to_cart_locator.click()
                     return True
         return False
-
+    
     def add_all_items(self) -> int:
+        """
+        Collect all 'Add to cart' buttons from the inventory list,
+        print their locators for debug, then click each visible button.
+        """
+    
         count = 0
-        for product in self.get_all_products():
-            product.add_to_cart_locator.scroll_into_view_if_needed(scroll_mode="center")
-            print(product.get_name())
-            print(product.is_available())
-            if product.is_available():
-                # scroll to the button just before clicking
-                product.add_to_cart_locator.scroll_into_view_if_needed(scroll_mode="center")
-                product.add_to_cart_locator.click()
-                count += 1
-                # optionally wait until badge updates
-                time.sleep(0.3)
+    
+        # Find the inventory list container
+        inventory_list = self.page.locator('[data-test="inventory-list"]')
+    
+        # Find all items inside the inventory list
+        items = inventory_list.locator('[data-test="inventory-item"]')
+        total_items = items.count()
+    
+        for i in range(total_items):
+            item = items.nth(i)
+            # Find the 'Add to cart' button inside the item
+            btn = item.locator('button[data-test^="add-to-cart"]')
+    
+            # If the button exists, print its locator and click
+            if btn.count() == 0:
+                print(f"Item {i} has no add-to-cart button, skipping.")
+                continue
+            
+            data_test = btn.get_attribute("data-test")
+            if data_test:
+                print(f'{data_test}')
+    
+            try:
+                if btn.is_visible(timeout=2000):
+                    btn.scroll_into_view_if_needed(timeout=5000)
+                    btn.click(timeout=5000)
+                    count += 1
+                else:
+                    print(f"Skipping '{data_test}': button not visible")
+            except Exception as e:
+                print(f"Failed to click '{data_test}': {e}")
+    
         return count
+
 
 
     # --- Full page structure for caching ---

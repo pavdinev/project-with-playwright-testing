@@ -2,7 +2,7 @@
 # Minimal config template - adapt to your project
 
 BASE_URL = "https://www.saucedemo.com/"
-HEADLESS = False
+HEADLESS = True
 
 # Users dictionary example - adapt to your real config
 USERS = {
